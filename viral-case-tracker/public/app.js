@@ -56,7 +56,7 @@ function renderCases() {
         <div>Momentum: <span>${c.momentum_score}/10</span></div>
         <div>Trigger freshness: <span>${c.trigger_freshness_score}/10</span></div>
         <div>Story strength: <span>${c.story_strength_score}/10</span></div>
-        <div>YouTube videos (verified): <span>${c.youtube_video_count === null ? '?' : c.youtube_video_count}</span></div>
+        <div>YouTube videos (verified): <span>${c.youtube_video_count === null ? '?' : (c.youtube_count_capped ? c.youtube_video_count + '+' : c.youtube_video_count)}</span></div>
       </div>
 
       ${c.youtube_lookup_error ? `
