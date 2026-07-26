@@ -65,6 +65,8 @@ function buildPrompt(searchBundles) {
 
 Do not invent cases or details not present in the search results below. Only use what's actually in the results.
 
+IMPORTANT: If multiple search results describe the same real-world case or event, merge them into ONE entry — do not create separate entries for the same case just because it was phrased differently across sources or search queries. Before finalizing your list, check it yourself for any two entries that could plausibly be the same person, victim, or case, and merge them if so.
+
 SEARCH RESULTS:
 ${context}
 
@@ -146,17 +148,11 @@ async function askGroq(prompt, apiKey) {
 }
 
 async function findCandidateCases(tavilyKey, groqKey) {
-  // TEMPORARY DEBUG: log what actually arrived, so we can see exactly
-  // what's wrong instead of guessing. Remove this block once fixed.
-  console.log('[DEBUG] tavilyKey type:', typeof tavilyKey, 'length:', tavilyKey ? tavilyKey.length : 'n/a');
-  console.log('[DEBUG] groqKey type:', typeof groqKey, 'length:', groqKey ? groqKey.length : 'n/a');
-  console.log('[DEBUG] process.env.GROQ_API_KEY directly:', typeof process.env.GROQ_API_KEY, process.env.GROQ_API_KEY ? process.env.GROQ_API_KEY.length : 'n/a');
-
   if (!tavilyKey) {
     throw new Error(`Missing TAVILY_API_KEY (received type: ${typeof tavilyKey}, value: ${JSON.stringify(tavilyKey)})`);
   }
   if (!groqKey) {
-    throw new Error(`Missing GROQ_API_KEY (received type: ${typeof groqKey}, value: ${JSON.stringify(groqKey)}, process.env directly has: ${typeof process.env.GROQ_API_KEY})`);
+    throw new Error(`Missing GROQ_API_KEY (received type: ${typeof groqKey}, value: ${JSON.stringify(groqKey)})`);
   }
 
   const searchBundles = await gatherSearchResults(tavilyKey);
