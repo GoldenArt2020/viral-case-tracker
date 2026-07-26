@@ -1,4 +1,4 @@
-const { findCandidateCases } = require('./gemini');
+const { findCandidateCases } = require('./research');
 const { getYoutubeSaturation } = require('./youtube');
 const { computeScore } = require('./scoring');
 const { upsertCase, logRun } = require('./store');
