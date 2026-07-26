@@ -6,7 +6,7 @@ const { upsertCase, logRun } = require('./store');
 async function runResearch() {
   const startedAt = new Date().toISOString();
   try {
-    const candidates = await findCandidateCases(process.env.GEMINI_API_KEY);
+    const candidates = await findCandidateCases(process.env.TAVILY_API_KEY, process.env.GROQ_API_KEY);
 
     const finalCases = [];
     for (const candidate of candidates) {
