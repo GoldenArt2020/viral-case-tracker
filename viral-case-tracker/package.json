@@ -1,0 +1,19 @@
+{
+  "name": "viral-case-tracker",
+  "version": "1.0.0",
+  "description": "Finds emerging US homicide cases before they saturate YouTube, scores them, and tracks them on a dashboard.",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "research-now": "node -e \"require('./lib/runResearch').runResearch().then(()=>process.exit(0))\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3"
+  }
+}

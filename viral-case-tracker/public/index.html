@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viral Case Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Viral Case Tracker</h1>
+      <p class="subtitle">Early-signal detection for US homicide cases, before YouTube saturates them.</p>
+    </div>
+    <div class="header-actions">
+      <span id="lastRunLabel" class="last-run"></span>
+      <button id="runNowBtn">Run research now</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="statusBanner" class="status-banner hidden"></div>
+
+    <div class="filters">
+      <label>
+        Verdict:
+        <select id="verdictFilter">
+          <option value="all">All</option>
+          <option value="green light">Green light</option>
+          <option value="watch">Watch</option>
+          <option value="skip">Skip</option>
+          <option value="needs recheck">Needs recheck</option>
+        </select>
+      </label>
+      <span id="caseCount" class="case-count"></span>
+    </div>
+
+    <div id="cases" class="case-grid"></div>
+    <div id="emptyState" class="empty-state hidden">
+      No cases yet. Click "Run research now" to find candidates, or wait for the next scheduled run.
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
