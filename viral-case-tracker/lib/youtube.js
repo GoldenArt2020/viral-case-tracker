@@ -37,7 +37,7 @@ async function getYoutubeSaturation(caseName, apiKey) {
     part: 'snippet',
     type: 'video',
     order: 'relevance',
-    maxResults: '15',
+    maxResults: '25',
     q: `${caseName} true crime case`,
   });
 
@@ -49,11 +49,16 @@ async function getYoutubeSaturation(caseName, apiKey) {
   const searchData = await searchRes.json();
   const items = searchData.items || [];
 
+  // If YouTube's raw search returned exactly the max we asked for, there
+  // may well be even more coverage beyond what we fetched — the count
+  // below is a floor ("at least this many"), not a guaranteed exact total.
+  const hitResultCeiling = items.length >= 25;
+
   // Filter out obvious news-outlet uploads before spending a videos.list
   // call on duration checks.
   const candidates = items.filter((item) => !isLikelyNewsChannel(item.snippet?.channelTitle));
   if (candidates.length === 0) {
-    return { count: 0, videos: [] };
+    return { count: 0, videos: [], capped: false };
   }
 
   const ids = candidates.map((item) => item.id.videoId).filter(Boolean);
@@ -79,7 +84,7 @@ async function getYoutubeSaturation(caseName, apiKey) {
       url: `https://www.youtube.com/watch?v=${v.id}`,
     }));
 
-  return { count: dedicated.length, videos: dedicated };
+  return { count: dedicated.length, videos: dedicated, capped: hitResultCeiling };
 }
 
 module.exports = { getYoutubeSaturation, isLikelyNewsChannel, parseIso8601Duration };
