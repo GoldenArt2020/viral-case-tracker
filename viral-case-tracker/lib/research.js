@@ -4,9 +4,6 @@ const TAVILY_URL = 'https://api.tavily.com/search';
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
-// A handful of search angles to cover the same ground the old Gemini
-// prompt covered: fresh developments, viral Reddit threads, local news
-// spreading beyond its market.
 const SEARCH_QUERIES = [
   'US homicide case new development arrest charges filed last 14 days',
   'true crime case going viral reddit r/TrueCrime new development',
@@ -48,7 +45,6 @@ async function gatherSearchResults(tavilyKey) {
       const results = await tavilySearch(query, tavilyKey);
       all.push({ query, results });
     } catch (err) {
-      // One failed query shouldn't kill the whole run — just skip it.
       all.push({ query, results: [], error: String(err.message || err) });
     }
   }
@@ -149,11 +145,19 @@ async function askGroq(prompt, apiKey) {
   return text;
 }
 
-// force redeploy
-
 async function findCandidateCases(tavilyKey, groqKey) {
-  if (!tavilyKey) throw new Error('Missing TAVILY_API_KEY');
-  if (!groqKey) throw new Error('Missing GROQ_API_KEY');
+  // TEMPORARY DEBUG: log what actually arrived, so we can see exactly
+  // what's wrong instead of guessing. Remove this block once fixed.
+  console.log('[DEBUG] tavilyKey type:', typeof tavilyKey, 'length:', tavilyKey ? tavilyKey.length : 'n/a');
+  console.log('[DEBUG] groqKey type:', typeof groqKey, 'length:', groqKey ? groqKey.length : 'n/a');
+  console.log('[DEBUG] process.env.GROQ_API_KEY directly:', typeof process.env.GROQ_API_KEY, process.env.GROQ_API_KEY ? process.env.GROQ_API_KEY.length : 'n/a');
+
+  if (!tavilyKey) {
+    throw new Error(`Missing TAVILY_API_KEY (received type: ${typeof tavilyKey}, value: ${JSON.stringify(tavilyKey)})`);
+  }
+  if (!groqKey) {
+    throw new Error(`Missing GROQ_API_KEY (received type: ${typeof groqKey}, value: ${JSON.stringify(groqKey)}, process.env directly has: ${typeof process.env.GROQ_API_KEY})`);
+  }
 
   const searchBundles = await gatherSearchResults(tavilyKey);
   const prompt = buildPrompt(searchBundles);
